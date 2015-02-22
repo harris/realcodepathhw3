@@ -12,11 +12,11 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import java.util.ArrayList;
 import org.apache.http.Header;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class TimelineActivity extends ActionBarActivity {
 
+  private static final int COMPOSE_REQUEST = 42;
   private ListView lvTweets;
   private TwitterClient client;
   private ArrayList<Tweet> tweets;
@@ -30,19 +30,16 @@ public class TimelineActivity extends ActionBarActivity {
     tweets = new ArrayList<Tweet>();
     tweetsArrayAdapter = new TweetsArrayAdapter(this, tweets);
     lvTweets.setAdapter(tweetsArrayAdapter);
-    client = RestApplication.getRestClient();
+    client = TwitterApplication.getRestClient();
 
-    //ActionBar actionBar = getSupportActionBar();
-    //actionBar.setDisplayUseLogoEnabled(true);
-    //actionBar.setLogo(R.drawable.ic_launcher);
-    //actionBar.setDispl
+    ActionBar actionBar = getSupportActionBar();
+    actionBar.setDisplayHomeAsUpEnabled(true);
     populateTimeline();
   }
 
   private void populateTimeline() {
     client.getHomeTimeline(0, new JsonHttpResponseHandler() {
       @Override public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-        Log.d("Debug", json.toString());
         tweetsArrayAdapter.addAll(Tweet.fromJsonArray(json));
         tweetsArrayAdapter.notifyDataSetChanged();
       }
@@ -61,10 +58,21 @@ public class TimelineActivity extends ActionBarActivity {
     return super.onCreateOptionsMenu(menu);
   }
 
+  @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    if (requestCode == COMPOSE_REQUEST && resultCode == RESULT_OK) {
+      tweetsArrayAdapter.clear();
+      populateTimeline();
+    }
+  }
+
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     int id = item.getItemId();
     if (id == R.id.action_settings) {
+      Intent intent = new Intent(this, ComposeActivity.class);
+      startActivityForResult(intent, COMPOSE_REQUEST);
       return true;
     }
 
