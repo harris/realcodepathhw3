@@ -59,6 +59,7 @@
       android:textColor="#828282"
       android:id="@+id/tvBody"
       android:text="New Text"
+      android:autoLink="all"
       android:layout_below="@+id/realName"
       android:layout_toRightOf="@+id/imageView"
       android:layout_toEndOf="@+id/imageView"

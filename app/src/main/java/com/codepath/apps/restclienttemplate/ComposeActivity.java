@@ -10,10 +10,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.activeandroid.util.Log;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.squareup.picasso.Picasso;
 import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -23,6 +26,9 @@ public class ComposeActivity extends ActionBarActivity {
   private EditText composeTweet;
   private TwitterClient client;
   private MenuItem charLimit;
+  private ImageView loggedInImageView;
+  private TextView loggedInRealName;
+  private TextView loggedInUsername;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +40,25 @@ public class ComposeActivity extends ActionBarActivity {
     actionBar.setDisplayShowTitleEnabled(false);
     composeTweet = (EditText) findViewById(R.id.compose_tweet);
     client = TwitterApplication.getRestClient();
+
+    loggedInImageView = (ImageView) findViewById(R.id.loggedInImageView);
+    loggedInRealName = (TextView) findViewById(R.id.loggedInRealName);
+    loggedInUsername = (TextView) findViewById(R.id.loggedInUserName);
+    client.getCredential(new JsonHttpResponseHandler() {
+
+      @Override public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+        User loggedInUser = User.fromJSON(response);
+        Picasso.with(ComposeActivity.this).load(loggedInUser.getProfileImageUrl()).into(loggedInImageView);
+        loggedInRealName.setText(loggedInUser.getName());
+        loggedInUsername.setText("@" + loggedInUser.getScreenName());
+      }
+
+      @Override public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+          JSONObject errorResponse) {
+        Log.d(errorResponse.toString());
+      }
+    });
+
 
     composeTweet.addTextChangedListener(new TextWatcher() {
       @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
