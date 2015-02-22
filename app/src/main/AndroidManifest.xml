@@ -53,15 +53,17 @@
         <activity
             android:name=".TimelineActivity"
             android:icon="@drawable/ic_launcher"
+            android:theme="@style/AppTheme"
             android:label="@string/title_activity_timeline" >
         </activity>
         <activity
             android:name=".ComposeActivity"
-            android:label="@string/title_activity_compose" >
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".TimelineActivity" >
+        android:label="@string/title_activity_compose" >
           <meta-data
               android:name="android.support.PARENT_ACTIVITY"
               android:value=".TimelineActivity" />
-
         </activity>
     </application>
 

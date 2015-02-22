@@ -30,15 +30,24 @@ public class TimelineActivity extends ActionBarActivity {
     tweets = new ArrayList<Tweet>();
     tweetsArrayAdapter = new TweetsArrayAdapter(this, tweets);
     lvTweets.setAdapter(tweetsArrayAdapter);
+    lvTweets.setOnScrollListener(new EndlessScrollListener() {
+      @Override public void onLoadMore(int page, int totalItemsCount) {
+        customLoadMoreDataFromApi(page);
+      }
+    });
     client = TwitterApplication.getRestClient();
 
     ActionBar actionBar = getSupportActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
-    populateTimeline();
+    populateTimeline(0);
   }
 
-  private void populateTimeline() {
-    client.getHomeTimeline(0, new JsonHttpResponseHandler() {
+  private void customLoadMoreDataFromApi(int page) {
+    populateTimeline(page);
+  }
+
+  private void populateTimeline(int page) {
+    client.getHomeTimeline(page, new JsonHttpResponseHandler() {
       @Override public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
         tweetsArrayAdapter.addAll(Tweet.fromJsonArray(json));
         tweetsArrayAdapter.notifyDataSetChanged();
@@ -63,14 +72,14 @@ public class TimelineActivity extends ActionBarActivity {
 
     if (requestCode == COMPOSE_REQUEST && resultCode == RESULT_OK) {
       tweetsArrayAdapter.clear();
-      populateTimeline();
+      populateTimeline(0);
     }
   }
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     int id = item.getItemId();
-    if (id == R.id.action_settings) {
+    if (id == R.id.action_compose) {
       Intent intent = new Intent(this, ComposeActivity.class);
       startActivityForResult(intent, COMPOSE_REQUEST);
       return true;
