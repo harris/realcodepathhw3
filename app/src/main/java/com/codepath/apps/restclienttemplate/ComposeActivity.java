@@ -3,6 +3,9 @@ package com.codepath.apps.restclienttemplate;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +22,7 @@ public class ComposeActivity extends ActionBarActivity {
 
   private EditText composeTweet;
   private TwitterClient client;
+  private MenuItem charLimit;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +34,26 @@ public class ComposeActivity extends ActionBarActivity {
     actionBar.setDisplayShowTitleEnabled(false);
     composeTweet = (EditText) findViewById(R.id.compose_tweet);
     client = TwitterApplication.getRestClient();
+
+    composeTweet.addTextChangedListener(new TextWatcher() {
+      @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+      }
+
+      @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+      }
+
+      @Override public void afterTextChanged(Editable s) {
+        int charLeft = 140 - composeTweet.getText().toString().length();
+        charLimit.setTitle("" + charLeft);
+      }
+    });
   }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.menu_compose, menu);
+    charLimit = menu.getItem(0);
     return true;
   }
 
@@ -49,6 +67,10 @@ public class ComposeActivity extends ActionBarActivity {
     //noinspection SimplifiableIfStatement
     if (id == R.id.action_tweet) {
       Log.d("DEBUG", composeTweet.getText().toString());
+      if (Integer.valueOf(charLimit.getTitle().toString()) < 0) {
+        Toast.makeText(ComposeActivity.this, "Please keep tweet within 140 characters", Toast.LENGTH_SHORT).show();
+        return true;
+      }
       client.postTweet(composeTweet.getText().toString(),  new JsonHttpResponseHandler() {
         @Override public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
           Toast.makeText(ComposeActivity.this, "Success", Toast.LENGTH_SHORT).show();

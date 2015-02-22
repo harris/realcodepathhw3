@@ -2,6 +2,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.codepath.apps.restclienttemplate.ComposeActivity">
+
+  <item android:id="@+id/number_char_left"
+      android:title="140"
+      android:orderInCategory="90"
+      app:showAsAction="always"/>
+
   <item android:id="@+id/action_tweet"
       android:title="@string/action_tweet"
       android:orderInCategory="100"
