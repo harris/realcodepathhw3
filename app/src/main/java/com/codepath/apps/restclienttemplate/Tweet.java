@@ -1,7 +1,14 @@
 package com.codepath.apps.restclienttemplate;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.apache.http.impl.cookie.DateParseException;
+import org.apache.http.impl.cookie.DateUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +36,34 @@ public class Tweet {
 
   public String getCreatedAt() {
     return createdAt;
+  }
+
+  public String getCreatedAtShort() {
+    String relativeTimeSpanString =
+        android.text.format.DateUtils.getRelativeTimeSpanString(getCreatedAtLong(),
+            new Date().getTime(), android.text.format.DateUtils.MINUTE_IN_MILLIS).toString();
+
+    String pattern = "(\\d+)\\s([a-z])(.*)";
+    Pattern r = Pattern.compile(pattern);
+
+    Matcher m = r.matcher(relativeTimeSpanString);
+    if (m.find( )) {
+      return m.group(1) + m.group(2);
+    } else {
+      return relativeTimeSpanString;
+    }
+  }
+
+  public long getCreatedAtLong() {
+    final String TWITTER="EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+    SimpleDateFormat sf = new SimpleDateFormat(TWITTER);
+    sf.setLenient(true);
+    try {
+      return sf.parse(getCreatedAt()).getTime();
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    return 1;
   }
 
   public static Tweet fromJSON(JSONObject jsonObject) {
