@@ -1,7 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
-import android.app.ActionBar;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,8 +32,10 @@ public class TimelineActivity extends ActionBarActivity {
     lvTweets.setAdapter(tweetsArrayAdapter);
     client = RestApplication.getRestClient();
 
-    //ActionBar actionBar = getActionBar();
-    //actionBar.setDisplayOptions(ActionBar.DISPLAY_USE_LOGO);
+    //ActionBar actionBar = getSupportActionBar();
+    //actionBar.setDisplayUseLogoEnabled(true);
+    //actionBar.setLogo(R.drawable.ic_launcher);
+    //actionBar.setDispl
     populateTimeline();
   }
 
@@ -56,19 +58,13 @@ public class TimelineActivity extends ActionBarActivity {
   public boolean onCreateOptionsMenu(Menu menu) {
     // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.menu_timeline, menu);
-    return true;
+    return super.onCreateOptionsMenu(menu);
   }
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
     int id = item.getItemId();
-
-    //noinspection SimplifiableIfStatement
     if (id == R.id.action_settings) {
-      //new Intent(this, ComposeActivity.class);
       return true;
     }
 
