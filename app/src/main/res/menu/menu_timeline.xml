@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.codepath.apps.restclienttemplate.TimelineActivity">
   <item android:id="@+id/action_compose"
-      android:icon="@drawable/ic_launcher"
+      android:icon="@drawable/compose_icon"
       android:title="Compose"
       android:orderInCategory="100"
       app:showAsAction="always"/>

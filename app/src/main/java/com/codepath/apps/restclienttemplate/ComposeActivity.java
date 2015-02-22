@@ -25,9 +25,9 @@ public class ComposeActivity extends ActionBarActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_compose);
     ActionBar actionBar = getSupportActionBar();
-    actionBar.setDisplayUseLogoEnabled(true);
     actionBar.setDisplayHomeAsUpEnabled(true);
-    actionBar.setLogo(R.drawable.ic_launcher);
+    actionBar.setDisplayShowCustomEnabled(true);
+    actionBar.setDisplayShowTitleEnabled(false);
     composeTweet = (EditText) findViewById(R.id.compose_tweet);
     client = TwitterApplication.getRestClient();
   }

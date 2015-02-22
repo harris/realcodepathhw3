@@ -1,22 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
-        <!--
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-        -->
-      <item name="android:actionBarStyle">@style/MyActionBar</item>
-    </style>
-
-    <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-    </style>
-  <color name="actionbar_text">#ffebeff2</color>
-
-  <color name="actionbar_background">#55ACEE</color>
-
+  <!-- the theme applied to the application or activity -->
   <style name="CustomActionBarTheme"
       parent="@style/Theme.AppCompat.Light">
     <item name="android:actionBarStyle">@style/MyActionBar</item>
@@ -33,9 +17,11 @@
   <style name="MyActionBar"
       parent="@style/Widget.AppCompat.ActionBar">
     <item name="android:titleTextStyle">@style/TitleTextStyle</item>
+    <item name="android:background">@color/actionBarColor</item>
 
     <!-- Support library compatibility -->
     <item name="titleTextStyle">@style/TitleTextStyle</item>
+    <item name="background">@color/actionBarColor</item>
   </style>
 
   <!-- action bar title text -->
@@ -50,5 +36,9 @@
     <item name="android:textColor">@color/actionbar_text</item>
   </style>
 
+  <color name="actionbar_text">#4D5B66</color>
+
+  <color name="actionbar_background">#55ACEE</color>
+  <color name="actionBarColor">#54ACEE</color>
 
 </resources>
