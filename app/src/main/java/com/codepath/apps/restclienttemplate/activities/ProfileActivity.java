@@ -27,6 +27,10 @@ public class ProfileActivity extends ActionBarActivity {
   private TextView loggedInRealName;
   private TextView loggedInUsername;
   private ImageView proifleViewBackground;
+  private TextView numFollowers;
+  private TextView numFollowings;
+  private TextView numTweets;
+  private TextView userDescription;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +46,14 @@ public class ProfileActivity extends ActionBarActivity {
     loggedInImageView = (ImageView) findViewById(R.id.loggedInImageView);
     loggedInRealName = (TextView) findViewById(R.id.loggedInRealName);
     loggedInUsername = (TextView) findViewById(R.id.loggedInUserName);
+    userDescription = (TextView) findViewById(R.id.userDescription);
+
     proifleViewBackground = (ImageView) findViewById(R.id.backgroundImage);
+
+    numTweets = (TextView) findViewById(R.id.numTweets);
+    numFollowings = (TextView) findViewById(R.id.numFollowings);
+    numFollowers = (TextView) findViewById(R.id.numFollowers);
+
 
     client = TwitterApplication.getRestClient();
     client.getCredential(new JsonHttpResponseHandler() {
@@ -50,11 +61,14 @@ public class ProfileActivity extends ActionBarActivity {
       @Override public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
         user = User.fromJSON(response);
         getSupportActionBar().setTitle("@" + user.getScreenName());
-        Picasso.with(ProfileActivity.this).load(user.getProfileImageUrl()).into(
-            loggedInImageView);
+        Picasso.with(ProfileActivity.this).load(user.getProfileImageUrl()).into(loggedInImageView);
         loggedInRealName.setText(user.getName());
         loggedInUsername.setText("@" + user.getScreenName());
         Picasso.with(ProfileActivity.this).load(user.getBackgroundUrl()).into(proifleViewBackground);
+        numTweets.setText(user.getTweetsCount() + "\nTWEETS");
+        numFollowings.setText(user.getFriendsCount() + "\nFOLLOWING");
+        numFollowers.setText(user.getFollowersCount() + "\nFOLLOWERS");
+        userDescription.setText(user.getDescription());
       }
 
       @Override public void onFailure(int statusCode, Header[] headers, Throwable throwable,

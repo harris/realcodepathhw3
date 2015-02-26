@@ -27,6 +27,7 @@
         android:src="@drawable/profile"
         android:layout_above="@+id/loggedInRealName"
         android:layout_centerHorizontal="true"
+        android:background="@drawable/white_border"
         />
 
     <TextView
@@ -49,12 +50,66 @@
         android:layout_below="@+id/loggedInRealName"
         android:layout_centerHorizontal="true"
         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffffff"
+        android:id="@+id/userDescription"
+        android:text="some description"
+        android:layout_below="@+id/loggedInUserName"
+        android:layout_centerHorizontal="true"
+        />
 
   </RelativeLayout>
+
+  <LinearLayout
+      android:layout_width="fill_parent"
+      android:layout_height="40dp"
+      android:layout_below="@+id/rlUserHeader"
+      android:id="@+id/stat_header"
+      android:orientation="horizontal"
+      >
+
+    <TextView
+        android:layout_weight="0.33333333"
+        android:layout_width="0dp"
+        android:text="1234 \nTWEETS"
+        android:id="@+id/numTweets"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/black_border"
+        android:gravity="center_vertical"
+        android:layout_height="match_parent"
+        />
+
+    <TextView
+        android:layout_weight="0.33333333"
+        android:layout_width="0dp"
+        android:id="@+id/numFollowings"
+        android:text="1234 \nFOLLOWING"
+        android:layout_gravity="center"
+        android:gravity="center_vertical"
+        android:background="@drawable/black_border"
+        android:layout_marginLeft="10dp"
+        android:layout_height="match_parent"
+        />
+    <TextView
+        android:layout_weight="0.33333333"
+        android:layout_width="0dp"
+        android:id="@+id/numFollowers"
+        android:text="1234 \nFOLLOWERS"
+        android:layout_marginLeft="10dp"
+        android:layout_gravity="center"
+        android:background="@drawable/black_border"
+        android:gravity="center_vertical"
+        android:layout_height="match_parent"
+        />
+  </LinearLayout>
+
   <FrameLayout
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
-      android:layout_below="@+id/rlUserHeader"
+      android:layout_below="@+id/stat_header"
       android:layout_alignParentLeft="true"
       android:layout_alignParentStart="true"
       android:id="@+id/ftContainer"
