@@ -12,11 +12,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.TweetsArrayAdapter;
 import com.codepath.apps.restclienttemplate.fragments.HomeTimelineFragment;
 import com.codepath.apps.restclienttemplate.fragments.MentionsTimelineFragment;
 import com.codepath.apps.restclienttemplate.fragments.TweetListFragment;
+import com.codepath.apps.restclienttemplate.models.Tweet;
 
-public class TimelineActivity extends ActionBarActivity{
+public class TimelineActivity extends ActionBarActivity implements TweetsArrayAdapter.TweetClickedListener{
   private static final int COMPOSE_REQUEST = 42;
   private ViewPager viewPager;
 
@@ -66,6 +68,12 @@ public class TimelineActivity extends ActionBarActivity{
 
   public void onProfileView(MenuItem item) {
     Intent intent = new Intent(this, ProfileActivity.class);
+    startActivity(intent);
+  }
+
+  @Override public void tweetClicked(Tweet tweet) {
+    Intent intent = new Intent(this, ProfileActivity.class);
+    intent.putExtra("screen_name", tweet.getUser().getScreenName());
     startActivity(intent);
   }
 

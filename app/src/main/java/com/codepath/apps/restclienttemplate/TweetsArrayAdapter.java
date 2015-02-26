@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.squareup.picasso.Picasso;
 import java.util.List;
@@ -15,9 +16,15 @@ import java.util.List;
  * Created by harris on 2/21/15.
  */
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
+  private final TweetClickedListener listener;
+
+  public interface TweetClickedListener {
+    public void tweetClicked(Tweet tweet);
+  }
 
   public TweetsArrayAdapter(Context context, List<Tweet> tweets) {
     super(context, android.R.layout.simple_list_item_1, tweets);
+    listener = (TweetClickedListener)context;
   }
 
   private static class ViewHolder {
@@ -29,7 +36,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
   }
 
   @Override public View getView(int position, View convertView, ViewGroup parent) {
-    Tweet tweet = getItem(position);
+    final Tweet tweet = getItem(position);
     ViewHolder viewHolder;
 
     if (convertView == null) {
@@ -45,7 +52,11 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     } else {
       viewHolder = (ViewHolder) convertView.getTag();
     }
-
+    viewHolder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        listener.tweetClicked(tweet);
+      }
+    });
     viewHolder.createdAt.setText(tweet.getCreatedAtShort());
     viewHolder.tvUserName.setText("@" + tweet.getUser().getScreenName());
     viewHolder.realName.setText(tweet.getUser().getName());

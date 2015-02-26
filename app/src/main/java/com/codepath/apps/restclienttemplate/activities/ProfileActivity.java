@@ -1,5 +1,6 @@
 package com.codepath.apps.restclienttemplate.activities;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -10,8 +11,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.activeandroid.util.Log;
 import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.TweetsArrayAdapter;
 import com.codepath.apps.restclienttemplate.TwitterApplication;
 import com.codepath.apps.restclienttemplate.TwitterClient;
+import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.apps.restclienttemplate.fragments.UserTimelineFragment;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -19,7 +22,7 @@ import com.squareup.picasso.Picasso;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
-public class ProfileActivity extends ActionBarActivity {
+public class ProfileActivity extends ActionBarActivity implements TweetsArrayAdapter.TweetClickedListener{
 
   private TwitterClient client;
   private User user;
@@ -56,7 +59,15 @@ public class ProfileActivity extends ActionBarActivity {
 
 
     client = TwitterApplication.getRestClient();
-    client.getCredential(new JsonHttpResponseHandler() {
+    if (screenName == null) {
+      populateSelfProfile();
+    } else {
+      populateUserInfo(screenName);
+    }
+  }
+
+  private void populateUserInfo(String screenName) {
+    client.getUserInfo(screenName, new JsonHttpResponseHandler() {
 
       @Override public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
         user = User.fromJSON(response);
@@ -64,7 +75,9 @@ public class ProfileActivity extends ActionBarActivity {
         Picasso.with(ProfileActivity.this).load(user.getProfileImageUrl()).into(loggedInImageView);
         loggedInRealName.setText(user.getName());
         loggedInUsername.setText("@" + user.getScreenName());
-        Picasso.with(ProfileActivity.this).load(user.getBackgroundUrl()).into(proifleViewBackground);
+        Picasso.with(ProfileActivity.this)
+            .load(user.getBackgroundUrl())
+            .into(proifleViewBackground);
         numTweets.setText(user.getTweetsCount() + "\nTWEETS");
         numFollowings.setText(user.getFriendsCount() + "\nFOLLOWING");
         numFollowers.setText(user.getFollowersCount() + "\nFOLLOWERS");
@@ -76,7 +89,31 @@ public class ProfileActivity extends ActionBarActivity {
         Log.d(errorResponse.toString());
       }
     });
+  }
 
+  private void populateSelfProfile() {
+    client.getCredential(new JsonHttpResponseHandler() {
+
+      @Override public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+        user = User.fromJSON(response);
+        getSupportActionBar().setTitle("@" + user.getScreenName());
+        Picasso.with(ProfileActivity.this).load(user.getProfileImageUrl()).into(loggedInImageView);
+        loggedInRealName.setText(user.getName());
+        loggedInUsername.setText("@" + user.getScreenName());
+        Picasso.with(ProfileActivity.this)
+            .load(user.getBackgroundUrl())
+            .into(proifleViewBackground);
+        numTweets.setText(user.getTweetsCount() + "\nTWEETS");
+        numFollowings.setText(user.getFriendsCount() + "\nFOLLOWING");
+        numFollowers.setText(user.getFollowersCount() + "\nFOLLOWERS");
+        userDescription.setText(user.getDescription());
+      }
+
+      @Override public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+          JSONObject errorResponse) {
+        Log.d(errorResponse.toString());
+      }
+    });
   }
 
   @Override
@@ -99,5 +136,11 @@ public class ProfileActivity extends ActionBarActivity {
     }
 
     return super.onOptionsItemSelected(item);
+  }
+
+  @Override public void tweetClicked(Tweet tweet) {
+    Intent intent = new Intent(this, ProfileActivity.class);
+    intent.putExtra("screen_name", tweet.getUser().getScreenName());
+    startActivity(intent);
   }
 }
