@@ -9,6 +9,7 @@
     <string name="action_tweet">Tweet</string>
     <string name="title_activity_compose">Compose</string>
     <string name="what_s_happening">What\'s happening?</string>
-
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

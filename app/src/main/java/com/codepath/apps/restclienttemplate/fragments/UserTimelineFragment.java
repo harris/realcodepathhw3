@@ -13,9 +13,16 @@ import org.json.JSONObject;
 /**
  * Created by harris on 2/25/15.
  */
-public class HomeTimelineFragment extends TweetListFragment {
+public class UserTimelineFragment extends TweetListFragment {
   private TwitterClient client;
 
+  public static UserTimelineFragment newInstance(String screenName) {
+    UserTimelineFragment userTimelineFragment = new UserTimelineFragment();
+    Bundle bundle = new Bundle();
+    bundle.putString("screen_name", screenName);
+    userTimelineFragment.setArguments(bundle);
+    return userTimelineFragment;
+  }
   @Override public void repopulate() {
     populateTimeline(0);
   }
@@ -31,7 +38,8 @@ public class HomeTimelineFragment extends TweetListFragment {
   }
 
   private void populateTimeline(int page) {
-    client.getHomeTimeline(page, new JsonHttpResponseHandler() {
+    String screenName = getArguments().getString("screen_name");
+    client.getUserTimeLine(screenName, page, new JsonHttpResponseHandler() {
       @Override public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
         addAll(Tweet.fromJsonArray(json));
       }

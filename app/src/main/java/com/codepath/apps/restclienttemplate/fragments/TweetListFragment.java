@@ -1,6 +1,5 @@
 package com.codepath.apps.restclienttemplate.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import com.codepath.apps.restclienttemplate.EndlessScrollListener;
 import com.codepath.apps.restclienttemplate.R;
-import com.codepath.apps.restclienttemplate.Tweet;
+import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.TweetsArrayAdapter;
 import java.util.ArrayList;
 import java.util.List;

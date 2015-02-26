@@ -1,4 +1,4 @@
-package com.codepath.apps.restclienttemplate;
+package com.codepath.apps.restclienttemplate.activities;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -8,19 +8,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 import com.astuetz.PagerSlidingTabStrip;
+import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.fragments.HomeTimelineFragment;
 import com.codepath.apps.restclienttemplate.fragments.MentionsTimelineFragment;
 import com.codepath.apps.restclienttemplate.fragments.TweetListFragment;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import java.util.ArrayList;
-import org.apache.http.Header;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class TimelineActivity extends ActionBarActivity{
   private static final int COMPOSE_REQUEST = 42;
@@ -52,7 +46,8 @@ public class TimelineActivity extends ActionBarActivity{
   @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == COMPOSE_REQUEST && resultCode == RESULT_OK) {
-      TweetListFragment tweetListFragment = (TweetListFragment)getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + viewPager.getCurrentItem());
+      TweetListFragment tweetListFragment = (TweetListFragment)getSupportFragmentManager().findFragmentByTag(
+          "android:switcher:" + R.id.viewpager + ":" + viewPager.getCurrentItem());
       tweetListFragment.clearAndRepopulate();
     }
   }
@@ -67,6 +62,11 @@ public class TimelineActivity extends ActionBarActivity{
     }
 
     return super.onOptionsItemSelected(item);
+  }
+
+  public void onProfileView(MenuItem item) {
+    Intent intent = new Intent(this, ProfileActivity.class);
+    startActivity(intent);
   }
 
   public class TweetsPagerAdapter extends FragmentPagerAdapter {
