@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.activeandroid.util.Log;
 import com.codepath.apps.restclienttemplate.R;
@@ -25,6 +26,7 @@ public class ProfileActivity extends ActionBarActivity {
   private ImageView loggedInImageView;
   private TextView loggedInRealName;
   private TextView loggedInUsername;
+  private ImageView proifleViewBackground;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class ProfileActivity extends ActionBarActivity {
     loggedInImageView = (ImageView) findViewById(R.id.loggedInImageView);
     loggedInRealName = (TextView) findViewById(R.id.loggedInRealName);
     loggedInUsername = (TextView) findViewById(R.id.loggedInUserName);
+    proifleViewBackground = (ImageView) findViewById(R.id.backgroundImage);
 
     client = TwitterApplication.getRestClient();
     client.getCredential(new JsonHttpResponseHandler() {
@@ -51,6 +54,7 @@ public class ProfileActivity extends ActionBarActivity {
             loggedInImageView);
         loggedInRealName.setText(user.getName());
         loggedInUsername.setText("@" + user.getScreenName());
+        Picasso.with(ProfileActivity.this).load(user.getBackgroundUrl()).into(proifleViewBackground);
       }
 
       @Override public void onFailure(int statusCode, Header[] headers, Throwable throwable,
