@@ -1,7 +1,10 @@
 package com.codepath.apps.restclienttemplate.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -37,7 +40,6 @@ public class TimelineActivity extends ActionBarActivity implements TweetsArrayAd
     PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
     tabsStrip.setTextColor(Color.parseColor("#01AEEB"));
     tabsStrip.setViewPager(viewPager);
-
   }
 
   @Override

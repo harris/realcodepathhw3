@@ -96,6 +96,9 @@ public class ComposeActivity extends ActionBarActivity {
         Toast.makeText(ComposeActivity.this, "Please keep tweet within 140 characters", Toast.LENGTH_SHORT).show();
         return true;
       }
+      if (!((TwitterApplication)getApplication()).canSendCall(this)) {
+        return true;
+      }
       client.postTweet(composeTweet.getText().toString(),  new JsonHttpResponseHandler() {
         @Override public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
           Toast.makeText(ComposeActivity.this, "Success", Toast.LENGTH_SHORT).show();

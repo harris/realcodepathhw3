@@ -39,6 +39,9 @@ public class UserTimelineFragment extends TweetListFragment {
 
   private void populateTimeline(int page) {
     String screenName = getArguments().getString("screen_name");
+    if (!((TwitterApplication)getActivity().getApplication()).canSendCall(getActivity())) {
+      return;
+    }
     client.getUserTimeLine(screenName, page, new JsonHttpResponseHandler() {
       @Override public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
         addAll(Tweet.fromJsonArray(json));

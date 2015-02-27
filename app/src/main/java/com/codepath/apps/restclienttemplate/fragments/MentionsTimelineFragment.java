@@ -31,6 +31,9 @@ public class MentionsTimelineFragment extends TweetListFragment{
   }
 
   private void populateMentionTimeline(int page) {
+    if (!((TwitterApplication)getActivity().getApplication()).canSendCall(getActivity())) {
+      return;
+    }
     client.getMentions(page, new JsonHttpResponseHandler() {
       @Override public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
         addAll(Tweet.fromJsonArray(json));

@@ -92,6 +92,9 @@ public class ProfileActivity extends ActionBarActivity implements TweetsArrayAda
   }
 
   private void populateSelfProfile() {
+    if (!((TwitterApplication)getApplication()).canSendCall(this)) {
+      return;
+    }
     client.getCredential(new JsonHttpResponseHandler() {
 
       @Override public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

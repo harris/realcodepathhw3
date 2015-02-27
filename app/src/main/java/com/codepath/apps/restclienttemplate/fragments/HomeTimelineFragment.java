@@ -31,6 +31,9 @@ public class HomeTimelineFragment extends TweetListFragment {
   }
 
   private void populateTimeline(int page) {
+    if (!((TwitterApplication)getActivity().getApplication()).canSendCall(getActivity())) {
+      return;
+    }
     client.getHomeTimeline(page, new JsonHttpResponseHandler() {
       @Override public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
         addAll(Tweet.fromJsonArray(json));
