@@ -21,7 +21,7 @@ import com.squareup.picasso.Picasso;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
-public class ComposeActivity extends ActionBarActivity {
+public class ComposeActivity extends BaseActivity {
 
   private EditText composeTweet;
   private TwitterClient client;
@@ -35,7 +35,6 @@ public class ComposeActivity extends ActionBarActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_compose);
     ActionBar actionBar = getSupportActionBar();
-    actionBar.setDisplayHomeAsUpEnabled(true);
     actionBar.setDisplayShowCustomEnabled(true);
     actionBar.setDisplayShowTitleEnabled(false);
     composeTweet = (EditText) findViewById(R.id.compose_tweet);
@@ -99,8 +98,10 @@ public class ComposeActivity extends ActionBarActivity {
       if (!((TwitterApplication)getApplication()).canSendCall(this)) {
         return true;
       }
+      showProgressBar();
       client.postTweet(composeTweet.getText().toString(),  new JsonHttpResponseHandler() {
         @Override public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
+          hideProgressBar();
           Toast.makeText(ComposeActivity.this, "Success", Toast.LENGTH_SHORT).show();
           setResult(RESULT_OK);
           finish();
@@ -108,6 +109,7 @@ public class ComposeActivity extends ActionBarActivity {
 
         @Override public void onFailure(int statusCode, Header[] headers, Throwable throwable,
             JSONObject errorResponse) {
+          hideProgressBar();
           Toast.makeText(ComposeActivity.this, errorResponse.toString(), Toast.LENGTH_SHORT).show();
         }
       });

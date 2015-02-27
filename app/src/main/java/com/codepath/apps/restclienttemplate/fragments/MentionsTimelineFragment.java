@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
+import com.codepath.apps.restclienttemplate.activities.BaseActivity;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.TwitterApplication;
 import com.codepath.apps.restclienttemplate.TwitterClient;
@@ -34,13 +35,16 @@ public class MentionsTimelineFragment extends TweetListFragment{
     if (!((TwitterApplication)getActivity().getApplication()).canSendCall(getActivity())) {
       return;
     }
+    listener.showProgressBar();
     client.getMentions(page, new JsonHttpResponseHandler() {
       @Override public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
+        listener.hideProgressBar();
         addAll(Tweet.fromJsonArray(json));
       }
 
       @Override public void onFailure(int statusCode, Header[] headers, Throwable throwable,
           JSONObject errorResponse) {
+        listener.hideProgressBar();
         if (errorResponse == null) {
           Log.d("DEBUG", "unknown errors");
         } else {

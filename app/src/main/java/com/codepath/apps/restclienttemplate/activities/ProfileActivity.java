@@ -22,7 +22,7 @@ import com.squareup.picasso.Picasso;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
-public class ProfileActivity extends ActionBarActivity implements TweetsArrayAdapter.TweetClickedListener{
+public class ProfileActivity extends BaseActivity implements TweetsArrayAdapter.TweetClickedListener{
 
   private TwitterClient client;
   private User user;
@@ -57,7 +57,6 @@ public class ProfileActivity extends ActionBarActivity implements TweetsArrayAda
     numFollowings = (TextView) findViewById(R.id.numFollowings);
     numFollowers = (TextView) findViewById(R.id.numFollowers);
 
-
     client = TwitterApplication.getRestClient();
     if (screenName == null) {
       populateSelfProfile();
@@ -67,53 +66,54 @@ public class ProfileActivity extends ActionBarActivity implements TweetsArrayAda
   }
 
   private void populateUserInfo(String screenName) {
+    if (!((TwitterApplication)getApplication()).canSendCall(this)) {
+      return;
+    }
+    showProgressBar();
     client.getUserInfo(screenName, new JsonHttpResponseHandler() {
-
       @Override public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-        user = User.fromJSON(response);
-        getSupportActionBar().setTitle("@" + user.getScreenName());
-        Picasso.with(ProfileActivity.this).load(user.getProfileImageUrl()).into(loggedInImageView);
-        loggedInRealName.setText(user.getName());
-        loggedInUsername.setText("@" + user.getScreenName());
-        Picasso.with(ProfileActivity.this)
-            .load(user.getBackgroundUrl())
-            .into(proifleViewBackground);
-        numTweets.setText(user.getTweetsCount() + "\nTWEETS");
-        numFollowings.setText(user.getFriendsCount() + "\nFOLLOWING");
-        numFollowers.setText(user.getFollowersCount() + "\nFOLLOWERS");
-        userDescription.setText(user.getDescription());
+        hideProgressBar();
+        populateProfileInfo(response);
       }
 
       @Override public void onFailure(int statusCode, Header[] headers, Throwable throwable,
           JSONObject errorResponse) {
+        hideProgressBar();
         Log.d(errorResponse.toString());
       }
     });
+  }
+
+  private void populateProfileInfo(JSONObject response) {
+    user = User.fromJSON(response);
+    getSupportActionBar().setTitle("@" + user.getScreenName());
+    Picasso.with(this).load(user.getProfileImageUrl()).into(loggedInImageView);
+    loggedInRealName.setText(user.getName());
+    loggedInUsername.setText("@" + user.getScreenName());
+    Picasso.with(this)
+        .load(user.getBackgroundUrl())
+        .into(proifleViewBackground);
+    numTweets.setText(user.getTweetsCount() + "\nTWEETS");
+    numFollowings.setText(user.getFriendsCount() + "\nFOLLOWING");
+    numFollowers.setText(user.getFollowersCount() + "\nFOLLOWERS");
+    userDescription.setText(user.getDescription());
   }
 
   private void populateSelfProfile() {
     if (!((TwitterApplication)getApplication()).canSendCall(this)) {
       return;
     }
-    client.getCredential(new JsonHttpResponseHandler() {
 
+    showProgressBar();
+    client.getCredential(new JsonHttpResponseHandler() {
       @Override public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-        user = User.fromJSON(response);
-        getSupportActionBar().setTitle("@" + user.getScreenName());
-        Picasso.with(ProfileActivity.this).load(user.getProfileImageUrl()).into(loggedInImageView);
-        loggedInRealName.setText(user.getName());
-        loggedInUsername.setText("@" + user.getScreenName());
-        Picasso.with(ProfileActivity.this)
-            .load(user.getBackgroundUrl())
-            .into(proifleViewBackground);
-        numTweets.setText(user.getTweetsCount() + "\nTWEETS");
-        numFollowings.setText(user.getFriendsCount() + "\nFOLLOWING");
-        numFollowers.setText(user.getFollowersCount() + "\nFOLLOWERS");
-        userDescription.setText(user.getDescription());
+        hideProgressBar();
+        populateProfileInfo(response);
       }
 
       @Override public void onFailure(int statusCode, Header[] headers, Throwable throwable,
           JSONObject errorResponse) {
+        hideProgressBar();
         Log.d(errorResponse.toString());
       }
     });

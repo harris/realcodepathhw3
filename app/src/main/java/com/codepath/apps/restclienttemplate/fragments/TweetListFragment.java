@@ -1,5 +1,6 @@
 package com.codepath.apps.restclienttemplate.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,12 @@ public abstract class TweetListFragment extends Fragment {
   private List<Tweet> tweets;
   private TweetsArrayAdapter tweetsArrayAdapter;
   private ListView lvTweets;
+  protected ProgressBarListner listener;
+
+  public interface ProgressBarListner {
+    public void showProgressBar();
+    public void hideProgressBar();
+  }
 
   @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
@@ -34,6 +41,11 @@ public abstract class TweetListFragment extends Fragment {
       }
     });
     return v;
+  }
+
+  @Override public void onAttach(Activity activity) {
+    super.onAttach(activity);
+    listener = (ProgressBarListner) activity;
   }
 
   public void clearAndRepopulate() {

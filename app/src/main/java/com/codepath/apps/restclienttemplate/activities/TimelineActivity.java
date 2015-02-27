@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.TweetsArrayAdapter;
@@ -22,7 +23,7 @@ import com.codepath.apps.restclienttemplate.fragments.MentionsTimelineFragment;
 import com.codepath.apps.restclienttemplate.fragments.TweetListFragment;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
-public class TimelineActivity extends ActionBarActivity implements TweetsArrayAdapter.TweetClickedListener{
+public class TimelineActivity extends BaseActivity implements TweetsArrayAdapter.TweetClickedListener{
   private static final int COMPOSE_REQUEST = 42;
   private ViewPager viewPager;
 
@@ -30,9 +31,6 @@ public class TimelineActivity extends ActionBarActivity implements TweetsArrayAd
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_timeline);
-
-    ActionBar actionBar = getSupportActionBar();
-    actionBar.setDisplayHomeAsUpEnabled(true);
 
     viewPager = (ViewPager) findViewById(R.id.viewpager);
     viewPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
