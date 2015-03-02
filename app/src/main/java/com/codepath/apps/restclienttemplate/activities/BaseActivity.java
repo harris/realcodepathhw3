@@ -39,7 +39,7 @@ public class BaseActivity extends ActionBarActivity implements TweetListFragment
   }
   @Override public void hideProgressBar() {
     progressBar.setIndeterminate(false);
-    progressBar.setVisibility(View.INVISIBLE);
+    progressBar.setVisibility(View.GONE);
   }
 
 }
